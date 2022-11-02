@@ -1,16 +1,14 @@
 use super::commands::{
     echo::{self, Echo},
+    followup::{self, FollowUp},
     hello::{self, Hello},
 };
 use crate::context::{CommandContext, Context};
 use std::{error::Error, sync::Arc};
 use twilight_interactions::command::CreateCommand;
-use twilight_model::{
-    application::{
-        command::Command,
-        interaction::{Interaction, InteractionData, InteractionType},
-    },
-    http::interaction::{InteractionResponse, InteractionResponseType},
+use twilight_model::application::{
+    command::Command,
+    interaction::{Interaction, InteractionData, InteractionType},
 };
 
 pub async fn interaction(
@@ -29,10 +27,10 @@ async fn handle_command(
     ctx: &Context,
     interaction: Interaction,
 ) -> Result<(), Box<dyn Error + Send + Sync>> {
-    let client = ctx.http.interaction(ctx.application_id);
     let command_ctx = CommandContext {
         twilight: Arc::clone(ctx),
         interaction_id: interaction.id,
+        interaction_token: interaction.token.clone(),
     };
 
     let data = if let Some(InteractionData::ApplicationCommand(data)) = interaction.data {
@@ -41,23 +39,12 @@ async fn handle_command(
         panic!("Command Interaction did not contain any data")
     };
 
-    let response = match data.name.as_str() {
-        "hello" => hello::run(command_ctx)?,
-        "echo" => echo::run(command_ctx, *data)?,
+    match data.name.as_str() {
+        "hello" => hello::run(&command_ctx).await?,
+        "echo" => echo::run(&command_ctx, *data).await?,
+        "followup" => followup::run(&command_ctx, *data).await?,
         _ => panic!("Unknown interaction command"),
     };
-
-    client
-        .create_response(
-            interaction.id,
-            &interaction.token,
-            &InteractionResponse {
-                kind: InteractionResponseType::ChannelMessageWithSource,
-                data: Some(response),
-            },
-        )
-        .exec()
-        .await?;
 
     Ok(())
 }
@@ -66,6 +53,7 @@ pub async fn register_commands(ctx: Context) -> Result<(), Box<dyn Error + Send 
     let commands: Vec<Command> = vec![
         Hello::create_command().into(),
         Echo::create_command().into(),
+        FollowUp::create_command().into(),
     ];
 
     let client = ctx.http.interaction(ctx.application_id);

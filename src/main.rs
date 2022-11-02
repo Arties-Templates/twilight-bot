@@ -4,12 +4,12 @@ mod interactions;
 use context::{Context, TwilightContext};
 use dotenvy::{dotenv, var};
 use futures::stream::StreamExt;
-use tracing::info;
 use std::{error::Error, sync::Arc};
+use tracing::info;
+use tracing_subscriber;
 use twilight_cache_inmemory::{InMemoryCache, ResourceType};
 use twilight_gateway::{cluster::ShardScheme, Cluster, Event, Intents};
 use twilight_http::Client as HttpClient;
-use tracing_subscriber;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
@@ -42,8 +42,9 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
     });
 
     let http = HttpClient::new(token);
+    let resource_types = ResourceType::MESSAGE | ResourceType::MEMBER | ResourceType::ROLE;
     let cache = InMemoryCache::builder()
-        .resource_types(ResourceType::MESSAGE)
+        .resource_types(resource_types)
         .build();
 
     let application_id = http

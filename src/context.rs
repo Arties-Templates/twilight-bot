@@ -19,4 +19,5 @@ pub type Context = Arc<TwilightContext>;
 pub struct CommandContext {
     pub twilight: Context,
     pub interaction_id: Id<InteractionMarker>,
+    pub interaction_token: String,
 }
