@@ -1178,6 +1178,7 @@ dependencies = [
  "twilight-gateway",
  "twilight-http",
  "twilight-interactions",
+ "twilight-mention",
  "twilight-model",
  "twilight-util",
 ]
@@ -1280,6 +1281,15 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn",
+]
+
+[[package]]
+name = "twilight-mention"
+version = "0.13.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2b0d118aaa449890c97bf2204cd28f71f79f0fa3eb0d2e064c0a66f1c443d886"
+dependencies = [
+ "twilight-model",
 ]
 
 [[package]]

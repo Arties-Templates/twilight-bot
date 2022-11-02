@@ -1,7 +1,6 @@
 use super::commands::hello::{self, Hello};
 use crate::context::Context;
 use std::error::Error;
-use tracing::error;
 use twilight_interactions::command::CreateCommand;
 use twilight_model::{
     application::{
@@ -61,7 +60,7 @@ pub async fn register_commands(ctx: Context) -> Result<(), Box<dyn Error + Send 
     let client = ctx.http.interaction(ctx.application_id);
 
     if let Err(why) = client.set_global_commands(&commands).exec().await {
-        error!("Failed to set global commands {}", why)
+        panic!("Failed to set global commands {}", why)
     };
 
     Ok(())
