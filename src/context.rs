@@ -8,7 +8,7 @@ use twilight_model::id::{
 };
 
 pub struct TwilightContext {
-    pub http: Arc<HttpClient>,
+    pub http: HttpClient,
     pub cache: InMemoryCache,
     pub application_id: Id<ApplicationMarker>,
     pub user_id: Id<UserMarker>,

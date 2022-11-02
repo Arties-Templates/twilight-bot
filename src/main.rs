@@ -41,7 +41,7 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
         cluster_spawn.up().await;
     });
 
-    let http = Arc::new(HttpClient::new(token));
+    let http = HttpClient::new(token);
     let cache = InMemoryCache::builder()
         .resource_types(ResourceType::MESSAGE)
         .build();
