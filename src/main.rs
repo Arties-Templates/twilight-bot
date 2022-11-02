@@ -84,7 +84,7 @@ async fn handle_event(
             interactions::handle::interaction(ctx, (*interaction).0).await?
         }
         Event::ShardConnected(_) => {
-            println!("Shard {shard_id} Connected to the Discord Gateway!");
+            println!("Shard {} Connected to the Discord Gateway!", shard_id + 1);
         }
         _ => {}
     }
