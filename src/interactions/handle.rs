@@ -2,8 +2,8 @@ use super::commands::{
     echo::{self, Echo},
     hello::{self, Hello},
 };
-use crate::context::Context;
-use std::error::Error;
+use crate::context::{CommandContext, Context};
+use std::{error::Error, sync::Arc};
 use twilight_interactions::command::CreateCommand;
 use twilight_model::{
     application::{
@@ -30,7 +30,10 @@ async fn handle_command(
     interaction: Interaction,
 ) -> Result<(), Box<dyn Error + Send + Sync>> {
     let client = ctx.http.interaction(ctx.application_id);
-    let interaction_id = interaction.id;
+    let command_ctx = CommandContext {
+        twilight: Arc::clone(ctx),
+        interaction_id: interaction.id,
+    };
 
     let data = if let Some(InteractionData::ApplicationCommand(data)) = interaction.data {
         data
@@ -39,8 +42,8 @@ async fn handle_command(
     };
 
     let response = match data.name.as_str() {
-        "hello" => hello::run(interaction_id, ctx)?,
-        "echo" => echo::run(interaction_id, ctx, *data)?,
+        "hello" => hello::run(command_ctx)?,
+        "echo" => echo::run(command_ctx, *data)?,
         _ => panic!("Unknown interaction command"),
     };
 
