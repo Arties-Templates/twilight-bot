@@ -1,5 +1,5 @@
 {
-  "Example Command": {
+  "Command Starter": {
     "prefix": "Command",
     "body": [
       "use std::error::Error;",
@@ -7,23 +7,25 @@
       "use twilight_model::{",
       "    application::interaction::application_command::CommandData,",
       "    http::interaction::InteractionResponseData,",
+      "    id::{marker::InteractionMarker, Id},",
       "};",
       "use twilight_util::builder::InteractionResponseDataBuilder;",
       "",
       "use crate::context::Context;",
       "",
       "#[derive(CommandModel, CreateCommand)]",
-      "#[command(name = \"${1:command}\", desc = \"${3:description}\")]",
-      "pub struct ${2:commandStructName} {",
+      "#[command(name = \"${1:commandName}\", desc = \"${2:commandDescription}.\")]",
+      "pub struct ${3:structName}{",
       "    #[command(desc = \"The text to echo\")]",
       "    text: String,",
       "}",
       "",
       "pub fn run(",
+      "    interaction_id: Id<InteractionMarker>,",
       "    _ctx: &Context,",
       "    command_data: CommandData,",
       ") -> Result<InteractionResponseData, Box<dyn Error + Send + Sync>> {",
-      "    let options = ${2:commandStructName}::from_interaction(command_data.into())?;",
+      "    let options = ${3:structName}::from_interaction(command_data.into())?;",
       "",
       "    let response = InteractionResponseDataBuilder::new()",
       "        .content(options.text)",
@@ -33,6 +35,6 @@
       "}",
       ""
     ],
-    "description": "Twilight Example Command"
+    "description": "A basic structure of what a command should be."
   }
 }

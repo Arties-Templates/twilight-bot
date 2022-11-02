@@ -30,6 +30,7 @@ async fn handle_command(
     interaction: Interaction,
 ) -> Result<(), Box<dyn Error + Send + Sync>> {
     let client = ctx.http.interaction(ctx.application_id);
+    let interaction_id = interaction.id;
 
     let data = if let Some(InteractionData::ApplicationCommand(data)) = interaction.data {
         data
@@ -38,8 +39,8 @@ async fn handle_command(
     };
 
     let response = match data.name.as_str() {
-        "hello" => hello::run(ctx)?,
-        "echo" => echo::run(ctx, *data)?,
+        "hello" => hello::run(interaction_id, ctx)?,
+        "echo" => echo::run(interaction_id, ctx, *data)?,
         _ => panic!("Unknown interaction command"),
     };
 

@@ -3,6 +3,7 @@ use twilight_interactions::command::{CommandModel, CreateCommand};
 use twilight_model::{
     application::interaction::application_command::CommandData,
     http::interaction::InteractionResponseData,
+    id::{marker::InteractionMarker, Id},
 };
 use twilight_util::builder::InteractionResponseDataBuilder;
 
@@ -16,6 +17,7 @@ pub struct Echo {
 }
 
 pub fn run(
+    _interaction_id: Id<InteractionMarker>,
     _ctx: &Context,
     command_data: CommandData,
 ) -> Result<InteractionResponseData, Box<dyn Error + Send + Sync>> {
