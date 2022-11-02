@@ -1,5 +1,4 @@
 use std::error::Error;
-
 use twilight_interactions::command::{CommandModel, CreateCommand};
 use twilight_model::http::interaction::InteractionResponseData;
 use twilight_util::builder::InteractionResponseDataBuilder;

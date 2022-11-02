@@ -1,4 +1,7 @@
-use super::commands::hello::{self, Hello};
+use super::commands::{
+    echo::{self, Echo},
+    hello::{self, Hello},
+};
 use crate::context::Context;
 use std::error::Error;
 use twilight_interactions::command::CreateCommand;
@@ -36,6 +39,7 @@ async fn handle_command(
 
     let response = match data.name.as_str() {
         "hello" => hello::run(ctx)?,
+        "echo" => echo::run(ctx, *data)?,
         _ => panic!("Unknown interaction command"),
     };
 
@@ -55,7 +59,10 @@ async fn handle_command(
 }
 
 pub async fn register_commands(ctx: Context) -> Result<(), Box<dyn Error + Send + Sync>> {
-    let commands: Vec<Command> = vec![Hello::create_command().into()];
+    let commands: Vec<Command> = vec![
+        Hello::create_command().into(),
+        Echo::create_command().into(),
+    ];
 
     let client = ctx.http.interaction(ctx.application_id);
 
