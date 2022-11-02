@@ -1,6 +1,6 @@
 {
   "Example Command": {
-    "prefix": "command",
+    "prefix": "Command",
     "body": [
       "use std::error::Error;",
       "use twilight_interactions::command::{CommandModel, CreateCommand};",
@@ -33,6 +33,6 @@
       "}",
       ""
     ],
-    "description": "Example Command"
+    "description": "Twilight Example Command"
   }
 }
