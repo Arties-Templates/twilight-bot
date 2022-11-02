@@ -1,7 +1,8 @@
-use super::commands::hello;
+use super::commands::hello::{self, Hello};
 use crate::context::Context;
 use std::error::Error;
 use tracing::error;
+use twilight_interactions::command::CreateCommand;
 use twilight_model::{
     application::{
         command::Command,
@@ -55,7 +56,7 @@ async fn handle_command(
 }
 
 pub async fn register_commands(ctx: Context) -> Result<(), Box<dyn Error + Send + Sync>> {
-    let commands: Vec<Command> = vec![];
+    let commands: Vec<Command> = vec![Hello::create_command().into()];
 
     let client = ctx.http.interaction(ctx.application_id);
 
