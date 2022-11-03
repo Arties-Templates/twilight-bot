@@ -1,3 +1,3 @@
-pub mod handle;
+pub mod handler;
 pub mod commands;
 mod util;

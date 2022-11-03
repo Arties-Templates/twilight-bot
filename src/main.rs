@@ -64,7 +64,7 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
         user_id,
     });
 
-    interactions::handle::register_commands(Arc::clone(&ctx)).await?;
+    interactions::handler::register_commands(Arc::clone(&ctx)).await?;
 
     while let Some((shard_id, event)) = events.next().await {
         ctx.cache.update(&event);
@@ -82,7 +82,7 @@ async fn handle_event(
 ) -> Result<(), Box<dyn Error + Send + Sync>> {
     match event {
         Event::InteractionCreate(interaction) => {
-            interactions::handle::interaction(ctx, (*interaction).0).await?
+            interactions::handler::interaction(ctx, (*interaction).0).await?
         }
         Event::ShardConnected(_) => {
             println!("Shard {} Connected to the Discord Gateway!", shard_id + 1);
