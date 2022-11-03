@@ -10,7 +10,6 @@ use tracing_subscriber;
 use twilight_cache_inmemory::{InMemoryCache, ResourceType};
 use twilight_gateway::{cluster::ShardScheme, Cluster, Event, Intents};
 use twilight_http::Client as HttpClient;
-use twilight_standby::Standby;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
@@ -48,8 +47,6 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
         .resource_types(resource_types)
         .build();
 
-    let standby = Standby::new();
-
     let application_id = http
         .current_user_application()
         .exec()
@@ -65,13 +62,11 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
         cache,
         application_id,
         user_id,
-        standby,
     });
 
     interactions::handle::register_commands(Arc::clone(&ctx)).await?;
 
     while let Some((shard_id, event)) = events.next().await {
-        ctx.standby.process(&event);
         ctx.cache.update(&event);
 
         tokio::spawn(handle_event(shard_id, event, Arc::clone(&ctx)));

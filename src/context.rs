@@ -6,14 +6,12 @@ use twilight_model::id::{
     marker::{ApplicationMarker, InteractionMarker, UserMarker},
     Id,
 };
-use twilight_standby::Standby;
 
 pub struct TwilightContext {
     pub http: HttpClient,
     pub cache: InMemoryCache,
     pub application_id: Id<ApplicationMarker>,
     pub user_id: Id<UserMarker>,
-    pub standby: Standby
 }
 
 pub type Context = Arc<TwilightContext>;
