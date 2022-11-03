@@ -1,8 +1,9 @@
 use std::error::Error;
-use twilight_http::{Response, response::marker::EmptyBody};
-use twilight_model::{http::interaction::{
-    InteractionResponse, InteractionResponseData, InteractionResponseType,
-}, channel::Message};
+use twilight_http::{response::marker::EmptyBody, Response};
+use twilight_model::{
+    channel::{embed::Embed, Message},
+    http::interaction::{InteractionResponse, InteractionResponseData, InteractionResponseType},
+};
 
 use crate::context::CommandContext;
 
@@ -34,7 +35,8 @@ pub async fn reply(
     let application_id = ctx.twilight.application_id;
     let interaction_token = ctx.interaction_token.as_ref();
 
-    let msg = ctx.twilight
+    let msg = ctx
+        .twilight
         .http
         .interaction(application_id)
         .create_response(
@@ -45,6 +47,46 @@ pub async fn reply(
                 data: Some(response),
             },
         )
+        .exec()
+        .await?;
+
+    Ok(msg)
+}
+
+/// Edit a interaction replys' text
+pub async fn edit_reply_text(
+    ctx: &CommandContext,
+    new_data: &str,
+) -> Result<Response<Message>, Box<dyn Error + Send + Sync>> {
+    let application_id = ctx.twilight.application_id;
+    let interaction_token = ctx.interaction_token.as_ref();
+
+    let msg = ctx
+        .twilight
+        .http
+        .interaction(application_id)
+        .update_response(interaction_token)
+        .content(Some(new_data))?
+        .exec()
+        .await?;
+
+    Ok(msg)
+}
+
+/// Edit a interaction replys' text
+pub async fn edit_reply_embed(
+    ctx: &CommandContext,
+    new_data: Embed,
+) -> Result<Response<Message>, Box<dyn Error + Send + Sync>> {
+    let application_id = ctx.twilight.application_id;
+    let interaction_token = ctx.interaction_token.as_ref();
+
+    let msg = ctx
+        .twilight
+        .http
+        .interaction(application_id)
+        .update_response(interaction_token)
+        .embeds(Some(&[new_data]))?
         .exec()
         .await?;
 
