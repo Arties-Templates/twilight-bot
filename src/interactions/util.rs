@@ -1,9 +1,8 @@
 #![allow(dead_code)]
-
 use std::error::Error;
 use twilight_http::{response::marker::EmptyBody, Response};
 use twilight_model::{
-    channel::{embed::Embed, Message},
+    channel::{message::Embed, Message},
     http::interaction::{InteractionResponse, InteractionResponseData, InteractionResponseType},
 };
 
@@ -23,7 +22,6 @@ pub async fn follow_up_text(
         .interaction(application_id)
         .create_followup(interaction_token)
         .content(message)?
-        .exec()
         .await?;
 
     Ok(msg)
@@ -49,7 +47,6 @@ pub async fn reply(
                 data: Some(response),
             },
         )
-        .exec()
         .await?;
 
     Ok(msg)
@@ -69,7 +66,6 @@ pub async fn edit_reply_text(
         .interaction(application_id)
         .update_response(interaction_token)
         .content(Some(new_data))?
-        .exec()
         .await?;
 
     Ok(msg)
@@ -89,8 +85,19 @@ pub async fn edit_reply_embed(
         .interaction(application_id)
         .update_response(interaction_token)
         .embeds(Some(&[new_data]))?
-        .exec()
         .await?;
 
     Ok(msg)
+}
+
+/// Returns a bool denoting whether or not a channel is NSFW
+///
+/// Defaults to false if the channel isn't cached
+pub fn is_channel_nsfw(ctx: &CommandContext) -> bool {
+    let channel = ctx.twilight.cache.channel(ctx.channel_id);
+
+    match channel {
+        Some(channel) => channel.nsfw.unwrap_or(false),
+        None => false,
+    }
 }

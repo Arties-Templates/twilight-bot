@@ -31,6 +31,9 @@ async fn handle_command(
         twilight: Arc::clone(ctx),
         interaction_id: interaction.id,
         interaction_token: interaction.token.clone(),
+        channel_id: interaction.channel_id.unwrap(),
+        guild_id: interaction.guild_id.unwrap(),
+        user_id: interaction.author_id().unwrap(),
     };
 
     let data = if let Some(InteractionData::ApplicationCommand(data)) = interaction.data {
