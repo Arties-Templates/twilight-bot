@@ -61,7 +61,7 @@ pub async fn register_commands(ctx: Context) -> Result<(), Box<dyn Error + Send 
 
     let client = ctx.http.interaction(ctx.application_id);
 
-    if let Err(why) = client.set_global_commands(&commands).exec().await {
+    if let Err(why) = client.set_global_commands(&commands).await {
         panic!("Failed to set global commands {}", why)
     };
 

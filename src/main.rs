@@ -48,13 +48,12 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
 
     let application_id = http
         .current_user_application()
-        .exec()
         .await?
         .model()
         .await?
         .id;
 
-    let user_id = http.current_user().exec().await?.model().await?.id;
+    let user_id = http.current_user().await?.model().await?.id;
 
     let ctx = Arc::new(TwilightContext {
         http,
