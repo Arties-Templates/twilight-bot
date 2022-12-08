@@ -6,7 +6,6 @@ use dotenvy::{dotenv, var};
 use futures::stream::StreamExt;
 use std::{error::Error, sync::Arc};
 use tracing::info;
-use tracing_subscriber;
 use twilight_cache_inmemory::{InMemoryCache, ResourceType};
 use twilight_gateway::{cluster::ShardScheme, Cluster, Event, Intents};
 use twilight_http::Client as HttpClient;
@@ -19,7 +18,7 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
     info!("Initiating...");
 
     let token = var("DISCORD_TOKEN")?;
-    let shards = var("SHARDS").unwrap_or(1.to_string()).parse::<u64>()?;
+    let shards = var("SHARDS").unwrap_or_else(|_| 1.to_string()).parse::<u64>()?;
 
     let scheme = ShardScheme::Range {
         from: 0,

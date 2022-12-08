@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 use std::error::Error;
 use twilight_http::{response::marker::EmptyBody, Response};
 use twilight_model::{
