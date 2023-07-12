@@ -31,7 +31,7 @@ async fn handle_command(
         twilight: Arc::clone(ctx),
         interaction_id: interaction.id,
         interaction_token: interaction.token.clone(),
-        channel_id: interaction.channel_id.unwrap(),
+        channel_id: interaction.channel.clone().unwrap().id,
         guild_id: interaction.guild_id.unwrap(),
         user_id: interaction.author_id().unwrap(),
     };
