@@ -17,7 +17,7 @@ SHELL ["/bin/bash", "-c"]
 COPY . .
 RUN cargo build --release
 
-FROM debian:11-slim
+FROM debian:12-slim
 
 WORKDIR /runner
 
